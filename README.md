@@ -1,3 +1,27 @@
-# hello-world
+import mysql from 'mysql';
 
-In this case, clicking the button will still trigger the default behavior associated with the button (such as submitting a form or navigating to a new page), as the event handler's return value of null doesn't prevent the default action. To prevent the default behavior, you would need to return false or use the event.preventDefault() method within the event handler.
+// Create a connection pool
+const pool = mysql.createPool({
+  host: 'your-database-host',
+  user: 'your-database-user',
+  password: 'your-database-password',
+  database: 'your-database-name',
+});
+
+export default async (req, res) => {
+  try {
+    // Get a connection from the pool
+    const connection = await pool.getConnection();
+
+    // Perform database query or operation
+    const results = await connection.query('SELECT * FROM your_table');
+
+    // Release the connection back to the pool
+    connection.release();
+
+    // Send the results as response
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(500).json({ error: 'Database error' });
+  }
+};
