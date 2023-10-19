@@ -1,1 +1,41 @@
 git commit --date="2023-01-15 14:30:00" -m "Commit message with a past date"
+
+import { TestBed, ComponentFixture, async } from '@angular/core/testing';
+import { YourComponent } from 'path-to-your-component'; // Replace with the actual path
+import { TransferDataService } from 'path-to-transfer-data-service'; // Replace with the actual path
+
+describe('YourComponent', () => {
+  let fixture: ComponentFixture<YourComponent>;
+  let component: YourComponent;
+  let transferDataService: TransferDataService;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [YourComponent],
+      providers: [TransferDataService], // Add other necessary providers
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(YourComponent);
+    component = fixture.componentInstance;
+    transferDataService = TestBed.inject(TransferDataService);
+  });
+
+  it('should call onSaveAndBackClick and update transferData', () => {
+    // Spy on methods to check if they are called
+    const setIsBackToDiscoveryNextClickSpy = spyOn(component, 'setIsBackToDiscooryNextClick').and.callThrough();
+    const setIsShowOutComeClickSpy = spyOn(component, 'setIsShowOutComeClick').and.callThrough();
+    const saveInteractionSpy = spyOn(component, 'saveInteraction').and.callThrough();
+    const setTransferedDataSpy = spyOn(transferDataService, 'setTransferedData');
+
+    // Call the function
+    component.onSaveAndBackClick();
+
+    // Expectations
+    expect(setIsBackToDiscoveryNextClickSpy).toHaveBeenCalled();
+    expect(setIsShowOutComeClickSpy).toHaveBeenCalled();
+    expect(saveInteractionSpy).toHaveBeenCalled();
+    expect(setTransferedDataSpy).toHaveBeenCalledWith(true, component.section);
+  });
+});
