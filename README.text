@@ -78,3 +78,23 @@ import { Component, Input } from '@angular/core';
 export class AlertBannerComponent {
   @Input() alertData: { type: string; content: any }[] = [];
 }
+// alert-banner.component.ts
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-alert-banner',
+  template: `
+    <!-- Your template code here -->
+  `,
+  styles: [
+    // Add your styles here if needed
+  ],
+})
+export class AlertBannerComponent {
+  @Input() alertData: { id: string; type: string; content: any }[] = [];
+
+  hasH1(): boolean {
+    return this.alertData.some(item => item.type === 'h1');
+  }
+}
+
