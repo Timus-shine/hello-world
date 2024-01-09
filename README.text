@@ -54,3 +54,27 @@ import { AppComponent } from './app.component';
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+
+
+// alert-banner.component.ts
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-alert-banner',
+  template: `
+    <div *ngFor="let item of alertData; let i = index" [ngSwitch]="item.type" [style.order]="i">
+      <p *ngSwitchCase="'p'">{{ item.content }}</p>
+      <h1 *ngSwitchCase="'h1'">{{ item.content }}</h1>
+      <ul *ngSwitchCase="'ul'">
+        <li *ngFor="let listItem of item.content">{{ listItem }}</li>
+      </ul>
+    </div>
+  `,
+  styles: [
+    // Add your styles here if needed
+  ],
+})
+export class AlertBannerComponent {
+  @Input() alertData: { type: string; content: any }[] = [];
+}
