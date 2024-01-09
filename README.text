@@ -1,41 +1,56 @@
-git commit --date="2023-01-15 14:30:00" -m "Commit message with a past date"
+// alert-banner.component.ts
+import { Component, Input } from '@angular/core';
 
-import { TestBed, ComponentFixture, async } from '@angular/core/testing';
-import { YourComponent } from 'path-to-your-component'; // Replace with the actual path
-import { TransferDataService } from 'path-to-transfer-data-service'; // Replace with the actual path
+@Component({
+  selector: 'app-alert-banner',
+  template: `
+    <div *ngFor="let item of alertData" [ngSwitch]="item.type">
+      <p *ngSwitchCase="'p'">{{ item.content }}</p>
+      <h1 *ngSwitchCase="'h1'">{{ item.content }}</h1>
+      <ul *ngSwitchCase="'ul'">
+        <li *ngFor="let listItem of item.content">{{ listItem }}</li>
+      </ul>
+    </div>
+  `,
+  styles: [
+    // Add your styles here if needed
+  ],
+})
+export class AlertBannerComponent {
+  @Input() alertData: { type: string; content: any }[] = [];
+}
 
-describe('YourComponent', () => {
-  let fixture: ComponentFixture<YourComponent>;
-  let component: YourComponent;
-  let transferDataService: TransferDataService;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [YourComponent],
-      providers: [TransferDataService], // Add other necessary providers
-    }).compileComponents();
-  }));
+// app.component.ts
+import { Component } from '@angular/core';
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(YourComponent);
-    component = fixture.componentInstance;
-    transferDataService = TestBed.inject(TransferDataService);
-  });
+@Component({
+  selector: 'app-root',
+  template: `
+    <app-alert-banner [alertData]="alertData"></app-alert-banner>
+  `,
+  styles: [
+    // Add your styles here if needed
+  ],
+})
+export class AppComponent {
+  alertData = [
+    { type: 'p', content: 'This is a paragraph alert' },
+    { type: 'h1', content: 'Heading 1 alert' },
+    { type: 'ul', content: ['List item 1', 'List item 2'] },
+  ];
+}
 
-  it('should call onSaveAndBackClick and update transferData', () => {
-    // Spy on methods to check if they are called
-    const setIsBackToDiscoveryNextClickSpy = spyOn(component, 'setIsBackToDiscooryNextClick').and.callThrough();
-    const setIsShowOutComeClickSpy = spyOn(component, 'setIsShowOutComeClick').and.callThrough();
-    const saveInteractionSpy = spyOn(component, 'saveInteraction').and.callThrough();
-    const setTransferedDataSpy = spyOn(transferDataService, 'setTransferedData');
 
-    // Call the function
-    component.onSaveAndBackClick();
+// app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AlertBannerComponent } from './alert-banner.component';
+import { AppComponent } from './app.component';
 
-    // Expectations
-    expect(setIsBackToDiscoveryNextClickSpy).toHaveBeenCalled();
-    expect(setIsShowOutComeClickSpy).toHaveBeenCalled();
-    expect(saveInteractionSpy).toHaveBeenCalled();
-    expect(setTransferedDataSpy).toHaveBeenCalledWith(true, component.section);
-  });
-});
+@NgModule({
+  declarations: [AppComponent, AlertBannerComponent],
+  imports: [BrowserModule],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
